@@ -1,7 +1,8 @@
 import React from "react";
 import "./App.css";
 import ProductList from "./components/ProductList";
-import Pagination from './components/Pagination'
+import Pagination from './components/Pagination';
+import Footer from "./components/Footer";
 
 class App extends React.Component {
 	constructor() {
@@ -10,7 +11,7 @@ class App extends React.Component {
 			products: [],
 			loading: false,
 			currentPage: 1,
-			productsPerPage: 4,
+			productsPerPage: 6,
 			shop: {},
 		};
 	}
@@ -32,6 +33,15 @@ class App extends React.Component {
 				shop: response,
 			});
 		});
+
+		this.props.client.checkout.create().then((checkout) => {
+			console.log('checkout', checkout);
+		});
+
+	}
+
+	addToCart(id, quantity) {
+		console.log(id, quantity)
 	}
 
 	render() {
@@ -66,10 +76,13 @@ class App extends React.Component {
 		});
 
 		return (
-			<div className="container">
-				<h1>{shop.name}</h1>
-				<ProductList products={currentProducts} loading={loading} />
-				<Pagination productsPerPage={productsPerPage} totalProducts={products.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} currentPage={currentPage} />
+			<div>
+				<div className="cover-wrapper">	<h1>{shop.name}</h1></div>
+				<div className="container">
+					<ProductList products={currentProducts} loading={loading} addToCart={this.addToCart} />
+					<Pagination productsPerPage={productsPerPage} totalProducts={products.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} currentPage={currentPage} />
+				</div>
+				<Footer shop={shop} />
 			</div>
 		);
 	}
