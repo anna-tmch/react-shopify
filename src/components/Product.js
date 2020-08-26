@@ -16,7 +16,7 @@ class Product extends Component {
 	};
 
 	render() {
-		const { title, images, variants, id } = this.props.product;
+		const { title, images, variants, id, options } = this.props.product;
 		let quantity = this.state.quantity
 
 		const imagesList = images.map((image, index) => {
@@ -37,6 +37,20 @@ class Product extends Component {
 			)
 		}) : null;
 
+		const variantSelector = options.map((option) => {
+			if (option.values.length > 1) {
+				return (
+					<select name={option.name} key={option.id} onChange={this.handleOptionChange}>
+						{option.values.map((value) => {
+							return (
+								<option value={value} key={`${option.id}-${value}`}> {`${value}`}</option>
+							)
+						})}
+					</select>
+				);
+			}
+		})
+
 		return (
 			<div className="product-wrapper">
 				<div className="product-card">
@@ -44,7 +58,6 @@ class Product extends Component {
 					<div className="product-title">
 						<h3>{title}</h3>
 					</div>
-					{/* {variantsList} */}
 					<label className="product-quantity">
 						Quantity
 						<input
@@ -52,9 +65,11 @@ class Product extends Component {
 							name="quantity"
 							value={this.state.quantity}
 							onChange={this.handleChange}
+							min="1"
 						/>
 					</label>
-					<button className="button buy-button" onClick={() => this.props.addToCart(id, quantity)}> Add to cart </button>
+					<button className="button buy-button" onClick={() => this.props.addToCart(variants[0].id, quantity)}> Add to cart </button>
+					<div>{variantSelector}</div>
 				</div>
 			</div>
 		);

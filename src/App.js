@@ -13,6 +13,7 @@ class App extends React.Component {
 			currentPage: 1,
 			productsPerPage: 6,
 			shop: {},
+			checkout: { lineItems: [] }
 		};
 	}
 
@@ -34,15 +35,30 @@ class App extends React.Component {
 			});
 		});
 
-		this.props.client.checkout.create().then((checkout) => {
-			console.log('checkout', checkout);
+		this.props.client.checkout.create().then((response) => {
+			console.log('checkout', response);
+			this.setState({
+				checkout: response,
+			});
 		});
 
 	}
 
-	addToCart(id, quantity) {
-		console.log(id, quantity)
-	}
+	addToCart = ((id, quantity) => {
+
+		const checkout = this.state.checkout.id;
+		console.log(id, quantity);
+		let variantId = id;
+		const items = [{ variantId, quantity: quantity }];
+		console.log(items)
+
+		return this.props.client.checkout.addLineItems(checkout, items).then(response => {
+			this.setState({
+				checkout: response,
+			});
+		});
+
+	});
 
 	render() {
 		const { products, shop, currentPage, productsPerPage, loading } = this.state;
@@ -75,11 +91,19 @@ class App extends React.Component {
 			}
 		});
 
+		const cart = this.state.checkout.lineItems.map((item) => {
+			return <div>
+				{`${item.title} ${item.quantity}`}
+			</div>
+		})
+
 		return (
 			<div>
-				<div className="cover-wrapper">	<h1>{shop.name}</h1></div>
+				<div className="cover-wrapper">	<h1>{shop.name}</h1>
+				</div>
 				<div className="container">
-					<ProductList products={currentProducts} loading={loading} addToCart={this.addToCart} />
+					<div>Cart:{cart} </div>
+					<ProductList products={currentProducts} loading={loading} addToCart={this.addToCart} client={this.props.client} />
 					<Pagination productsPerPage={productsPerPage} totalProducts={products.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} currentPage={currentPage} />
 				</div>
 				<Footer shop={shop} />

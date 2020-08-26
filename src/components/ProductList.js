@@ -14,7 +14,7 @@ class ProductList extends Component {
 		}
 
 		const productList = products.map((product) => {
-			return <Product key={product.id} product={product} addToCart={this.props.addToCart} />;
+			return <Product key={product.id} product={product} addToCart={this.props.addToCart} client={this.props.client} />;
 		});
 
 		return <div className="product-list">{productList}</div>;
