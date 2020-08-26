@@ -62,6 +62,12 @@ class App extends React.Component {
 
 	});
 
+	handleClick = () => {
+		this.setState((prevState) => ({
+			cartOpen: !prevState.cartOpen,
+		}));
+	};
+
 	render() {
 		const { products, shop, currentPage, productsPerPage, loading } = this.state;
 
@@ -95,11 +101,20 @@ class App extends React.Component {
 
 		return (
 			<div>
+				<div className="menu-wrapper">
+					<div className="container">
+						<div className="menu-inner">
+							<div className="cart-icon" onClick={this.handleClick}>
+
+							</div>
+						</div>
+					</div>
+				</div>
 				<div className="cover-wrapper">	<h1>{shop.name}</h1>
 				</div>
 				<div className="container">
 					<div>
-						<Cart checkout={this.state.checkout} cartOpen={this.state.cartOpen} addToCart={this.addToCart} />
+						<Cart checkout={this.state.checkout} cartOpen={this.state.cartOpen} addToCart={this.addToCart} shop={this.state.shop} />
 					</div>
 					<ProductList products={currentProducts} loading={loading} addToCart={this.addToCart} client={this.props.client} />
 					<Pagination productsPerPage={productsPerPage} totalProducts={products.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} currentPage={currentPage} />
