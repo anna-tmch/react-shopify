@@ -9,9 +9,12 @@ export default class Cart extends Component {
 			return <div className="cart-line-item" key={item.id.toString()}>
 				<img src={item.variant.image.src} />
 				<div>
-					<div className="cart-item-title">{item.title}</div>
+					<div className="cart-item-title">{item.title} </div>
+					{item.variant.title === "Default Title" ? "" : <div className="cart-item-subtitle"> {item.variant.title} </div>}
 					<span className="cart-item-quantity">{`x${item.quantity} `}</span>
-					<div className="cart-item-price">{(item.variant.price) * (item.quantity)} {shop.currencyCode}</div>
+					<div className="cart-item-bottom">
+						<div className="cart-item-price">{(item.variant.price) * (item.quantity)} {shop.currencyCode}</div>
+					</div>
 					<div onClick={() => this.props.removeItem(item.id.toString())} className="label-remove">Remove</div>
 				</div>
 			</div>

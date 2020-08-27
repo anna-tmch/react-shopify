@@ -31,7 +31,6 @@ class Product extends Component {
 		let selectedOptions = this.state.selectedOptions;
 
 		selectedOptions[name] = value;
-		console.log(selectedOptions);
 
 		const selectedVariant = this.props.client.product.helpers.variantForOptions(this.props.product, selectedOptions)
 		this.setState({
@@ -39,8 +38,18 @@ class Product extends Component {
 		})
 	};
 
+	increase = () => {
+		this.setState(prevState => ({ quantity: +prevState.quantity + 1 }))
+	}
+
+	decrease = () => {
+		if (this.state.quantity > 1) {
+			this.setState(prevState => ({ quantity: +prevState.quantity - 1 }))
+		}
+	}
+
 	render() {
-		const { title, images, variants, id, options } = this.props.product;
+		const { title, images, variants, id, options, description } = this.props.product;
 		const { shop } = this.props;
 		let quantity = this.state.quantity;
 		let variant = this.state.selectedVariant;
@@ -49,7 +58,6 @@ class Product extends Component {
 			if (index === 0) { // grab only first image
 				return (
 					<div key={image.src} className="product-image" >
-						{/* <img src={image.src} /> */}
 						<img src={variant.image.src} />
 					</div>
 				)
@@ -68,24 +76,28 @@ class Product extends Component {
 			<div className="product-wrapper">
 				<div className="product-card">
 					{imagesList}
-					<div className="product-title">
-						<h4>{title}</h4>
-						<p>	{variant.price} {shop.currencyCode}</p>
-						<div><VariantSelector options={options} handleSelectChange={this.handleSelectChange} key={`${options[0].id}`} /></div>
-
+					<h4 className="product-title">
+						{title}
+					</h4>
+					<p className="products-desc">{description}</p>
+					<div className="select-wrapper">
+						<VariantSelector options={options} handleSelectChange={this.handleSelectChange} key={`${options[0].id}`} />
 					</div>
-					<label className="product-quantity">
-						Quantity
-						<input
-							type="number"
-							name="quantity"
-							value={this.state.quantity}
-							onChange={this.handleChange}
-							min="1"
-						/>
-					</label>
+					<div className="product-prq">
+						<span className="product-price">	{parseInt(variant.price)} {shop.currencyCode}</span>
+						<div className="product-quantity">
+							<button className="decrease-quantity" onClick={this.decrease}>&ndash;</button>
+							<input
+								type="number"
+								name="quantity"
+								value={this.state.quantity}
+								onChange={this.handleChange}
+								min="1"
+							/>
+							<button className="increase-quantity" onClick={this.increase}>+</button>
+						</div>
+					</div>
 					<button className="button buy-button" onClick={() => this.props.addToCart(variant.id, quantity)}> Add to cart </button>
-
 				</div>
 			</div>
 		);

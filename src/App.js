@@ -38,7 +38,6 @@ class App extends React.Component {
 		});
 
 		this.props.client.checkout.create().then((response) => {
-			console.log('checkout', response);
 			this.setState({
 				checkout: response,
 			});
@@ -49,11 +48,8 @@ class App extends React.Component {
 	addToCart = ((id, quantity) => {
 
 		const checkout = this.state.checkout.id;
-		console.log(id, quantity);
 		let variantId = id;
 		const items = [{ variantId, quantity: parseInt(quantity, 10) }];
-		console.log(items)
-
 		return this.props.client.checkout.addLineItems(checkout, items).then(response => {
 			this.setState({
 				checkout: response,
@@ -65,7 +61,6 @@ class App extends React.Component {
 
 	removeItem = ((id) => {
 		const checkoutId = this.state.checkout.id;
-		console.log(id);
 		let lineItemId = id;
 		return this.props.client.checkout.removeLineItems(checkoutId, [lineItemId]).then(response => {
 			this.setState({
@@ -111,13 +106,20 @@ class App extends React.Component {
 			}
 		});
 
+		const totalQuantity = () => {
+			let result = checkout.lineItems.reduce((accumulator, item) => {
+				return accumulator + item.quantity;
+			}, 0)
+			return result;
+		}
+
 		return (
 			<div>
 				<div className="menu-wrapper">
 					<div className="container">
 						<div className="menu-inner">
 							<div className="cart-icon" onClick={this.handleClick}>
-
+								{checkout.lineItems.length > 0 ? <span>{totalQuantity()}</span> : null}
 							</div>
 						</div>
 					</div>
