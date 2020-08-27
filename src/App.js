@@ -57,10 +57,22 @@ class App extends React.Component {
 		return this.props.client.checkout.addLineItems(checkout, items).then(response => {
 			this.setState({
 				checkout: response,
+				cartOpen: true
 			});
 		});
 
 	});
+
+	removeItem = ((id) => {
+		const checkoutId = this.state.checkout.id;
+		console.log(id);
+		let lineItemId = id;
+		return this.props.client.checkout.removeLineItems(checkoutId, [lineItemId]).then(response => {
+			this.setState({
+				checkout: response,
+			});
+		});
+	})
 
 	handleClick = () => {
 		this.setState((prevState) => ({
@@ -69,7 +81,7 @@ class App extends React.Component {
 	};
 
 	render() {
-		const { products, shop, currentPage, productsPerPage, loading } = this.state;
+		const { products, shop, cartOpen, checkout, currentPage, productsPerPage, loading, client } = this.state;
 
 		const indexOfLastProduct = currentPage * productsPerPage;
 		const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -114,9 +126,9 @@ class App extends React.Component {
 				</div>
 				<div className="container">
 					<div>
-						<Cart checkout={this.state.checkout} cartOpen={this.state.cartOpen} addToCart={this.addToCart} shop={this.state.shop} />
+						<Cart checkout={checkout} cartOpen={cartOpen} shop={shop} removeItem={this.removeItem} addToCart={this.addToCart} handleClick={this.handleClick} />
 					</div>
-					<ProductList products={currentProducts} loading={loading} addToCart={this.addToCart} client={this.props.client} />
+					<ProductList products={currentProducts} loading={loading} addToCart={this.addToCart} client={this.props.client} shop={shop} />
 					<Pagination productsPerPage={productsPerPage} totalProducts={products.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} currentPage={currentPage} />
 				</div>
 				<Footer shop={shop} />

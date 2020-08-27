@@ -57,9 +57,9 @@
 	width: 360px;
 	transition: all 0.3s linear;
 	z-index: 11;
-	padding: 10px;
 	box-shadow: 0 10px 30px 0 rgba(0,0,0,0.2);
-	overflow-y: auto;
+	padding-top: 100px;
+	padding-bottom: 100px;
 }
 
 .cart.active {
@@ -67,24 +67,117 @@
 	right: 0;
 }
 
-.cart-total {
-	margin-top: 20px;
-	font-weight: bold;
+.cart-header {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	padding: 10px 10px 0;
+	border-bottom: 1px solid rgba(0, 0, 0, .2);
 }
 
-.line-item-wrapper {
+.cart-header .cross-icon {
+	top: 50%;
+	transform: translateY(-50%);
+	right: 10px;
+}
+
+.cart-footer {
+	background: #ffffff;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	height: 101px;
+	margin-top: 20px;
+	display: flex;
+}
+
+.cart-total {
+	width: 60%;
+	font-weight: bold;
+	border-top: 1px solid rgba(0, 0, 0, .2);
 	display: flex;
 	align-items: center;
+	justify-content: center;
+}
+
+.cart-checkout {
+	background-color: #8BA989;
+	height: 100%;
+	width: 40%;
+}
+
+.cart-checkout a {
+	color: #ffffff;
+	text-decoration: none;
+	font-weight: 300;
+	letter-spacing: 3px;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.cart-content {
+	position: relative;
+	height: 100%;
+	overflow-y: auto;
+}
+
+.cart-empty {
+	padding: 10px;
+	font-size: 21px;
+}
+
+.cross-icon {
+	background: url("./img/close.svg");
+	width: 30px;
+	height: 30px;
+	background-size: contain;
+	position: absolute;
+	right: 0;
+	top: 0;
+	cursor: pointer;
+}
+
+.cart-line-item {
+	display: flex;
 	border-bottom: 1px solid rgba(0, 0, 0, .1);
-	padding: 10px 0;
+	padding: 15px 70px 10px 10px;
+	position: relative;
 }
 
-.line-item-wrapper h4 {
-	margin: 0;
+.cart-item-title {
+	font-weight: bold;
+	line-height: 1.25;
+	margin-bottom: 10px;
 }
 
-.line-item-wrapper img {
+.cart-line-item .label-remove {
+	text-decoration: underline;
+	cursor: pointer;
+	letter-spacing: 2px;
+	font-size: 14px;
+}
+
+.cart-item-quantity {
+	letter-spacing: 2px;
+	font-size: 14px;
+	position: absolute;
+	right: 10px;
+	top: 15px;
+}
+
+.cart-item-price {
+	font-size: 16px;
+}
+
+.cart-line-item img {
 	max-width: 100px;
+	max-height: 100px;
 	margin-right: 10px;
 }
 
@@ -161,11 +254,6 @@
 	position: relative;
 }
 
-.product-card h3 {
-	font-weight: 300;
-	font-size: 16px;
-}
-
 .product-wrapper {
 	width: 33.333%;
 	display: flex;
@@ -205,7 +293,6 @@
 	height: 40px;
 	font-size: 21px;
 	padding: 0 0 0 15px;
-	margin-left: 10px;
 }
 
 .footer-wrapper {

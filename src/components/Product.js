@@ -1,10 +1,20 @@
 import React, { Component } from "react";
+import VariantSelector from "./VariantSelector"
 
 class Product extends Component {
 	constructor(props) {
 		super(props);
+
+		let defaultOption = {}
+
+		this.props.product.options.forEach((option) => {
+			defaultOption[option.name] = option.values[0].value;
+		});
+
 		this.state = {
-			quantity: 1
+			quantity: 1,
+			selectedOptions: defaultOption,
+			selectedVariant: this.props.product.variants[0]
 		}
 	}
 
@@ -15,15 +25,32 @@ class Product extends Component {
 		});
 	};
 
+	handleSelectChange = (event) => {
+
+		const { name, value } = event.target;
+		let selectedOptions = this.state.selectedOptions;
+
+		selectedOptions[name] = value;
+		console.log(selectedOptions);
+
+		const selectedVariant = this.props.client.product.helpers.variantForOptions(this.props.product, selectedOptions)
+		this.setState({
+			selectedVariant: selectedVariant
+		})
+	};
+
 	render() {
 		const { title, images, variants, id, options } = this.props.product;
-		let quantity = this.state.quantity
+		const { shop } = this.props;
+		let quantity = this.state.quantity;
+		let variant = this.state.selectedVariant;
 
 		const imagesList = images.map((image, index) => {
 			if (index === 0) { // grab only first image
 				return (
 					<div key={image.src} className="product-image" >
-						<img src={image.src} />
+						{/* <img src={image.src} /> */}
+						<img src={variant.image.src} />
 					</div>
 				)
 			}
@@ -37,26 +64,15 @@ class Product extends Component {
 			)
 		}) : null;
 
-		const variantSelector = options.map((option) => {
-			if (option.values.length > 1) {
-				return (
-					<select name={option.name} key={option.id} onChange={this.handleOptionChange}>
-						{option.values.map((value) => {
-							return (
-								<option value={value} key={`${option.id}-${value}`}> {`${value}`}</option>
-							)
-						})}
-					</select>
-				);
-			}
-		})
-
 		return (
 			<div className="product-wrapper">
 				<div className="product-card">
 					{imagesList}
 					<div className="product-title">
-						<h3>{title}</h3>
+						<h4>{title}</h4>
+						<p>	{variant.price} {shop.currencyCode}</p>
+						<div><VariantSelector options={options} handleSelectChange={this.handleSelectChange} key={`${options[0].id}`} /></div>
+
 					</div>
 					<label className="product-quantity">
 						Quantity
@@ -68,8 +84,8 @@ class Product extends Component {
 							min="1"
 						/>
 					</label>
-					<button className="button buy-button" onClick={() => this.props.addToCart(variants[0].id, quantity)}> Add to cart </button>
-					<div>{variantSelector}</div>
+					<button className="button buy-button" onClick={() => this.props.addToCart(variant.id, quantity)}> Add to cart </button>
+
 				</div>
 			</div>
 		);
