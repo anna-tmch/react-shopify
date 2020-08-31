@@ -37,12 +37,22 @@ class App extends React.Component {
 			});
 		});
 
-		this.props.client.checkout.create().then((response) => {
-			this.setState({
-				checkout: response,
-			});
-		});
+		let checkoutId = localStorage.getItem('checkoutId')
 
+		if (!checkoutId) {
+			this.props.client.checkout.create().then((response) => {
+				this.setState({
+					checkout: response,
+				});
+				localStorage.setItem('checkoutId', this.state.checkout.id);
+			});
+		} else {
+			this.props.client.checkout.fetch(checkoutId).then((response) => {
+				this.setState({
+					checkout: response,
+				})
+			});
+		}
 	}
 
 	addToCart = ((id, quantity) => {
