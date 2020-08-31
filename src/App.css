@@ -194,6 +194,17 @@
 	color: #c26868;
 }
 
+.label-remove-all {
+	text-decoration: underline;
+	cursor: pointer;
+	letter-spacing: 2px;
+	font-size: 13px;
+	text-transform: lowercase;
+	color: #c26868;
+	text-align: left;
+	padding: 7px 15px;
+}
+
 .cart-item-quantity {
 	letter-spacing: 2px;
 	font-size: 14px;

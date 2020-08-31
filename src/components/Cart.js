@@ -27,7 +27,9 @@ export default class Cart extends Component {
 					<div className="cross-icon" onClick={() => this.props.handleClick()}></div>
 				</div>
 				{cart.length > 0 ?
-					<div className="cart-content"> {cart}
+					<div className="cart-content">
+						{cart}
+						<div onClick={() => this.props.removeAll()} className="label-remove-all" >clear cart</div>
 					</div> : <div className="cart-empty"> Cart is empty... </div>}
 				{checkout.totalPrice > 0 ?
 					<div className="cart-footer">

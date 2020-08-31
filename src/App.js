@@ -79,6 +79,22 @@ class App extends React.Component {
 		});
 	})
 
+	removeAll = () => {
+		const checkoutId = this.state.checkout.id;
+		let lineItems = this.state.checkout.lineItems;
+		let lineItemsToRemove = [];
+
+		lineItems.forEach(item => {
+			lineItemsToRemove.push(item.id)
+		});
+
+		return this.props.client.checkout.removeLineItems(checkoutId, lineItemsToRemove).then(response => {
+			this.setState({
+				checkout: response,
+			});
+		});
+	}
+
 	handleClick = () => {
 		this.setState((prevState) => ({
 			cartOpen: !prevState.cartOpen,
@@ -138,7 +154,7 @@ class App extends React.Component {
 				</div>
 				<div className="container">
 					<div>
-						<Cart checkout={checkout} cartOpen={cartOpen} shop={shop} removeItem={this.removeItem} addToCart={this.addToCart} handleClick={this.handleClick} />
+						<Cart checkout={checkout} cartOpen={cartOpen} shop={shop} removeItem={this.removeItem} removeAll={this.removeAll} addToCart={this.addToCart} handleClick={this.handleClick} />
 					</div>
 					<ProductList products={currentProducts} loading={loading} addToCart={this.addToCart} client={this.props.client} shop={shop} />
 					<Pagination productsPerPage={productsPerPage} totalProducts={products.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} currentPage={currentPage} />
