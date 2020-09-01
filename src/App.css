@@ -524,3 +524,19 @@
 .btn-group.sorting .btn:last-child {
 	margin-right: 0;
 }
+
+.heart-icon {
+	width: 25px;
+	height: 20px;
+	cursor: pointer;
+}
+
+.btn-wish {
+	background-color: transparent;
+	border: none;
+	outline: none;
+	padding: 2px 0;
+	position: absolute;
+	right: 20px;
+	top: 20px;
+}
