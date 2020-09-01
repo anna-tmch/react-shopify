@@ -40,7 +40,7 @@ export default class Wishlist extends Component {
 
 		return (
 			<div>
-				{productsWishlist}
+
 			</div>
 		)
 	}
