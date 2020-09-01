@@ -12,4 +12,5 @@
 * Variant selector
 * Quantity selector
 * Mini cart
-* Adding/Removing items
+* Adding/Removing products from cart
+* Sorting products by price and title
