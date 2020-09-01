@@ -97,6 +97,8 @@ class Product extends Component {
 							<button className="increase-quantity" onClick={this.increase}>+</button>
 						</div>
 					</div>
+					<button onClick={() => this.props.addToWishList(id)}>Wish this?</button>
+					<p>{this.props.wishlist.includes(id) ? "YES" : "no"}</p>
 					<button className="button buy-button" onClick={() => this.props.addToCart(variant.id, quantity)}> Add to cart </button>
 				</div>
 			</div>

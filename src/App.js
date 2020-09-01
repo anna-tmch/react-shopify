@@ -4,6 +4,7 @@ import ProductList from "./components/ProductList";
 import Pagination from './components/Pagination';
 import Footer from "./components/Footer";
 import Cart from "./components/Cart"
+import Wishlist from "./components/Wishlist";
 
 class App extends React.Component {
 	constructor() {
@@ -15,6 +16,7 @@ class App extends React.Component {
 			productsPerPage: 6,
 			shop: {},
 			checkout: { lineItems: [] },
+			wishlist: [],
 			cartOpen: false,
 			sortedByPrice: false,
 			sortedByTitle: false,
@@ -73,6 +75,20 @@ class App extends React.Component {
 
 	});
 
+	addToWishList = ((id) => {
+		const wishlist = this.state.wishlist;
+		if (wishlist.includes(id)) {
+			const newWishlist = wishlist.filter((item) => item !== id)
+			this.setState({
+				wishlist: newWishlist,
+			})
+		} else {
+			this.setState({
+				wishlist: [...wishlist, id],
+			})
+		}
+	})
+
 	removeItem = ((id) => {
 		const checkoutId = this.state.checkout.id;
 		let lineItemId = id;
@@ -130,7 +146,7 @@ class App extends React.Component {
 	};
 
 	render() {
-		const { products, shop, cartOpen, checkout, currentPage, productsPerPage, loading, client } = this.state;
+		const { products, shop, cartOpen, checkout, currentPage, productsPerPage, loading, wishlist } = this.state;
 
 		const indexOfLastProduct = currentPage * productsPerPage;
 		const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -189,7 +205,8 @@ class App extends React.Component {
 						<button onClick={this.sortByPrice} className={`btn ${this.state.sortedByPrice ? "asc" : ""} ${this.state.sortedByPriceDesc ? "desc" : ""}`} >Price </button>
 						<button onClick={this.sortByTitle} className={`btn ${this.state.sortedByTitle ? "asc" : ""} ${this.state.sortedByTitleDesc ? "desc" : ""}`} >Title </button>
 					</div>
-					<ProductList products={currentProducts} loading={loading} addToCart={this.addToCart} client={this.props.client} shop={shop} />
+					<Wishlist wishlist={wishlist} client={this.props.client} addToCart={this.addToCart} client={this.props.client} shop={shop} />
+					<ProductList wishlist={wishlist} products={currentProducts} loading={loading} addToCart={this.addToCart} addToWishList={this.addToWishList} client={this.props.client} shop={shop} />
 					<Pagination productsPerPage={productsPerPage} totalProducts={products.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} currentPage={currentPage} />
 				</div>
 				<Footer shop={shop} />

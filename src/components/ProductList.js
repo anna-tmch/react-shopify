@@ -3,7 +3,7 @@ import Product from "./Product";
 
 class ProductList extends Component {
 	render() {
-		const { products, loading, shop, client } = this.props;
+		const { products, loading, shop, client, wishlist } = this.props;
 
 		if (loading) {
 			return (
@@ -14,7 +14,7 @@ class ProductList extends Component {
 		}
 
 		const productList = products.map((product) => {
-			return <Product key={product.id} product={product} addToCart={this.props.addToCart} client={client} shop={shop} />;
+			return <Product key={product.id} wishlist={wishlist} product={product} addToCart={this.props.addToCart} addToWishList={this.props.addToWishList} client={client} shop={shop} />;
 		});
 
 		return <div className="product-list">{productList}</div>;
