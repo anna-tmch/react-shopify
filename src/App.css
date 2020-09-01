@@ -307,6 +307,11 @@
 .product-list {
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.product-list .product-wrapper:nth-child(-n+3) {
+	margin-top: 0;
 }
 
 .product-card {
@@ -314,12 +319,12 @@
 	border-radius: 30px;
 	overflow: hidden;
 	padding: 20px 20px 100px;
-	max-width: 300px;
+	width: 100%;
 	position: relative;
 }
 
 .product-wrapper {
-	width: 33.333%;
+	width: 30%;
 	display: flex;
 	justify-content: center;
 	margin: 30px 0;
@@ -328,6 +333,8 @@
 .product-image img {
 	display: block;
 	width: 100%;
+	max-width: 200px;
+	margin: 0 auto;
 }
 
 .product-title {
@@ -468,4 +475,52 @@
 	background-color: #ECECE9;
 	padding: 36px 0;
 	text-align: center;
+}
+
+.btn-group.sorting {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	padding: 20px 0;
+}
+
+.btn-group {
+	font-size: 12px;
+	text-transform: lowercase;
+	letter-spacing: 2px;
+	color: #445e42;
+}
+
+.btn-group.sorting .btn {
+	border: 1px solid #8BA989;
+	background-color: rgba(255,255,255, 1);
+	padding: 7px 20px;
+	cursor: pointer;
+	color: #8BA989;
+	text-transform: uppercase;
+	font-size: 11px;
+	letter-spacing: 2px;
+	border-radius: 12px;
+	outline: none;
+	transition: all 0.3s ease;
+	margin: 0 10px;
+}
+
+.btn-group.sorting .btn.asc {
+	color: #c26868;
+	border-color: #c26868;
+	position: relative;
+}
+
+.btn-group.sorting .btn.desc {
+	color: #6897c2;
+	border-color: #6897c2;
+}
+
+.btn-group.sorting .btn:hover {
+	color: rgba(0, 0, 0, .8)
+}
+
+.btn-group.sorting .btn:last-child {
+	margin-right: 0;
 }

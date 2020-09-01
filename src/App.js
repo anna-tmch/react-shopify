@@ -15,7 +15,11 @@ class App extends React.Component {
 			productsPerPage: 6,
 			shop: {},
 			checkout: { lineItems: [] },
-			cartOpen: false
+			cartOpen: false,
+			sortedByPrice: false,
+			sortedByTitle: false,
+			sortedByPriceDesc: '',
+			sortedByTitleDesc: '',
 		};
 	}
 
@@ -79,7 +83,7 @@ class App extends React.Component {
 		});
 	})
 
-	removeAll = () => {
+	removeAllItem = () => {
 		const checkoutId = this.state.checkout.id;
 		let lineItems = this.state.checkout.lineItems;
 		let lineItemsToRemove = [];
@@ -98,6 +102,30 @@ class App extends React.Component {
 	handleClick = () => {
 		this.setState((prevState) => ({
 			cartOpen: !prevState.cartOpen,
+		}));
+	};
+
+	sortByPrice = () => {
+		this.setState((prevState) => ({
+			products: prevState.products.sort((a, b) => (
+				this.state.sortedByPrice ? (a.variants[0].price - b.variants[0].price) : (b.variants[0].price - a.variants[0].price)
+			)),
+			sortedByPrice: !prevState.sortedByPrice,
+			sortedByPriceDesc: this.state.sortedByPrice,
+			sortedByTitleDesc: '',
+			sortedByTitle: false
+		}));
+	};
+
+	sortByTitle = () => {
+		this.setState((prevState) => ({
+			products: prevState.products.sort((a, b) => (
+				this.state.sortedByTitle ? (b.title.localeCompare(a.title)) : (a.title.localeCompare(b.title))
+			)),
+			sortedByTitle: !prevState.sortedByTitle,
+			sortedByTitleDesc: this.state.sortedByTitle,
+			sortedByPriceDesc: '',
+			sortedByPrice: false
 		}));
 	};
 
@@ -155,6 +183,11 @@ class App extends React.Component {
 				<div className="container">
 					<div>
 						<Cart checkout={checkout} cartOpen={cartOpen} shop={shop} removeItem={this.removeItem} removeAll={this.removeAll} addToCart={this.addToCart} handleClick={this.handleClick} />
+					</div>
+					<div className="btn-group sorting">
+						sort:
+						<button onClick={this.sortByPrice} className={`btn ${this.state.sortedByPrice ? "asc" : ""} ${this.state.sortedByPriceDesc ? "desc" : ""}`} >Price </button>
+						<button onClick={this.sortByTitle} className={`btn ${this.state.sortedByTitle ? "asc" : ""} ${this.state.sortedByTitleDesc ? "desc" : ""}`} >Title </button>
 					</div>
 					<ProductList products={currentProducts} loading={loading} addToCart={this.addToCart} client={this.props.client} shop={shop} />
 					<Pagination productsPerPage={productsPerPage} totalProducts={products.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} currentPage={currentPage} />
