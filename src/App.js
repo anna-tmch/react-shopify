@@ -99,7 +99,7 @@ class App extends React.Component {
 		});
 	})
 
-	removeAllItem = () => {
+	removeAll = () => {
 		const checkoutId = this.state.checkout.id;
 		let lineItems = this.state.checkout.lineItems;
 		let lineItemsToRemove = [];
