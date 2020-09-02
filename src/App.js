@@ -75,16 +75,17 @@ class App extends React.Component {
 
 	});
 
-	addToWishList = ((id) => {
+	addToWishList = ((id, selectedVariantId) => {
 		const wishlist = this.state.wishlist;
-		if (wishlist.includes(id)) {
-			const newWishlist = wishlist.filter((item) => item !== id)
+		const wishItem = [{ id: id, selectedVariantId: selectedVariantId }];
+		if (wishlist.some(item => item.id === id && item.selectedVariantId === selectedVariantId)) {
+			const newWishlist = wishlist.filter((item) => item.selectedVariantId !== selectedVariantId)
 			this.setState({
 				wishlist: newWishlist,
 			})
 		} else {
 			this.setState({
-				wishlist: [...wishlist, id],
+				wishlist: [...wishlist, { id: id, selectedVariantId: selectedVariantId }],
 			})
 		}
 	})

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ItemWishlist from './ItemWishlist'
 
 export default class Wishlist extends Component {
 
@@ -10,16 +11,13 @@ export default class Wishlist extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		const updatedList = [];
+		const wishlist = this.props.wishlist;
+		let ids = wishlist.map(item => item.id);
 		if (this.props.wishlist !== prevProps.wishlist) {
 			if (this.props.wishlist.length > 0) {
-				this.props.wishlist.forEach(item => {
-					this.props.client.product.fetch(item).then((response) => {
-						updatedList.push(response);
-					}).then(() => {
-						this.setState({
-							wishedProducts: updatedList
-						});
+				this.props.client.product.fetchMultiple(ids).then((response) => {
+					this.setState({
+						wishedProducts: response
 					});
 				})
 			} else {
@@ -30,17 +28,18 @@ export default class Wishlist extends Component {
 		}
 	}
 
+
 	render() {
 
 		const productsWishlist = this.state.wishedProducts.map((item) => {
 			return (
-				<div key={`wishitem-${item.id}`}>{item.title}</div>
+				<ItemWishlist key={`wishitem-${item.id}`} item={item} />
 			)
 		});
 
 		return (
-			<div>
-
+			<div className="wishlist">
+				{productsWishlist}
 			</div>
 		)
 	}

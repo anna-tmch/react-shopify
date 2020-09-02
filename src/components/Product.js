@@ -91,7 +91,7 @@ class Product extends Component {
 						<VariantSelector options={options} handleSelectChange={this.handleSelectChange} key={`${options[0].id}`} />
 					</div>
 					<div className="product-prq">
-						<span className="product-price">	{parseInt(variant.price)} {shop.currencyCode}</span>
+						<span className="product-price"> {parseInt(variant.price)} {shop.currencyCode}</span>
 						<div className="product-quantity">
 							<button className="decrease-quantity" onClick={this.decrease}>&ndash;</button>
 							<input
@@ -104,8 +104,8 @@ class Product extends Component {
 							<button className="increase-quantity" onClick={this.increase}>+</button>
 						</div>
 					</div>
-					<button onClick={() => this.props.addToWishList(id)} className="btn-wish">
-						<Icon key={`icon-${variant.id}`} fill={this.props.wishlist.includes(id) ? "#585858" : "#fff"} stroke="#585858" />
+					<button onClick={() => this.props.addToWishList(id, this.state.selectedVariant.id)} className="btn-wish">
+						<Icon key={`icon-${variant.id}`} fill={this.props.wishlist.some(item => item.id === id && item.selectedVariantId === this.state.selectedVariant.id) ? "#585858" : "#fff"} stroke="#585858" />
 					</button>
 					<button className="button buy-button" onClick={() => this.props.addToCart(variant.id, quantity)}> Add to cart </button>
 				</div>
