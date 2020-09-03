@@ -232,6 +232,26 @@
 	position: relative;
 }
 
+.wishlist-icon {
+	margin-right: 20px;
+	display: flex;
+	align-items: center;
+}
+
+.wishlist-icon .heart-icon {
+	width: 30px;
+	height: 25px;
+}
+
+.product-card .wishlist-icon {
+	margin-right: 0;
+}
+
+.product-card .wishlist-icon .heart-icon {
+	width: 26px;
+	height: 23px;
+}
+
 .cart-icon span {
 	position: absolute;
 	right: -5px;

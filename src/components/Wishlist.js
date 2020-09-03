@@ -7,7 +7,7 @@ export default class Wishlist extends Component {
 
 		const productsWishlist = this.props.wishlist.map((item) => {
 			return (
-				<ItemWishlist key={`wishitem-${item.id}`} item={item} addToCart={this.props.addToCart} />
+				<ItemWishlist key={`wishitem-${item.selectedVariant.id}`} item={item} addToCart={this.props.addToCart} />
 			)
 		});
 
@@ -15,7 +15,7 @@ export default class Wishlist extends Component {
 			<div className={`wishlist ${this.props.wishlistOpen ? 'active' : ''}`}>
 				<div className="wishlist-header">
 					<h2>My wishlist</h2>
-					<div className="cross-icon" onClick={() => this.props.handleWishlistClose()}></div>
+					<div className="cross-icon" onClick={() => this.props.toggleWishlist()}></div>
 				</div>
 				{productsWishlist}
 			</div>
