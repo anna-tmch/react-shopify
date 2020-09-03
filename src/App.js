@@ -18,6 +18,7 @@ class App extends React.Component {
 			checkout: { lineItems: [] },
 			wishlist: [],
 			cartOpen: false,
+			wishlistOpen: false,
 			sortedByPrice: false,
 			sortedByTitle: false,
 			sortedByPriceDesc: '',
@@ -62,30 +63,31 @@ class App extends React.Component {
 	}
 
 	addToCart = ((id, quantity) => {
-
 		const checkout = this.state.checkout.id;
 		let variantId = id;
 		const items = [{ variantId, quantity: parseInt(quantity, 10) }];
+
 		return this.props.client.checkout.addLineItems(checkout, items).then(response => {
 			this.setState({
 				checkout: response,
 				cartOpen: true
 			});
 		});
-
 	});
 
-	addToWishList = ((id, selectedVariantId) => {
+	addToWishList = ((title, selectedVariant) => {
 		const wishlist = this.state.wishlist;
-		const wishItem = [{ id: id, selectedVariantId: selectedVariantId }];
-		if (wishlist.some(item => item.id === id && item.selectedVariantId === selectedVariantId)) {
-			const newWishlist = wishlist.filter((item) => item.selectedVariantId !== selectedVariantId)
+		const wishItem = [{ title: title, selectedVariant: selectedVariant }];
+
+		if (wishlist.some(item => item.selectedVariant === selectedVariant)) {
+			const newWishlist = wishlist.filter((item) => item.selectedVariant !== selectedVariant)
 			this.setState({
 				wishlist: newWishlist,
 			})
 		} else {
 			this.setState({
-				wishlist: [...wishlist, { id: id, selectedVariantId: selectedVariantId }],
+				wishlist: [...wishlist, { title: title, selectedVariant: selectedVariant }],
+				wishlistOpen: true
 			})
 		}
 	})
@@ -93,6 +95,7 @@ class App extends React.Component {
 	removeItem = ((id) => {
 		const checkoutId = this.state.checkout.id;
 		let lineItemId = id;
+
 		return this.props.client.checkout.removeLineItems(checkoutId, [lineItemId]).then(response => {
 			this.setState({
 				checkout: response,
@@ -116,9 +119,15 @@ class App extends React.Component {
 		});
 	}
 
-	handleClick = () => {
+	handleCartClose = () => {
 		this.setState((prevState) => ({
 			cartOpen: !prevState.cartOpen,
+		}));
+	};
+
+	handleWishlistClose = () => {
+		this.setState((prevState) => ({
+			wishlistOpen: !prevState.wishlistOpen,
 		}));
 	};
 
@@ -189,7 +198,7 @@ class App extends React.Component {
 				<div className="menu-wrapper">
 					<div className="container">
 						<div className="menu-inner">
-							<div className="cart-icon" onClick={this.handleClick}>
+							<div className="cart-icon" onClick={this.handleCartClose}>
 								{checkout.lineItems.length > 0 ? <span>{totalQuantity()}</span> : null}
 							</div>
 						</div>
@@ -199,14 +208,14 @@ class App extends React.Component {
 				</div>
 				<div className="container">
 					<div>
-						<Cart checkout={checkout} cartOpen={cartOpen} shop={shop} removeItem={this.removeItem} removeAll={this.removeAll} addToCart={this.addToCart} handleClick={this.handleClick} />
+						<Cart checkout={checkout} cartOpen={cartOpen} shop={shop} removeItem={this.removeItem} removeAll={this.removeAll} addToCart={this.addToCart} handleCartClose={this.handleCartClose} />
 					</div>
 					<div className="btn-group sorting">
 						sort:
 						<button onClick={this.sortByPrice} className={`btn ${this.state.sortedByPrice ? "asc" : ""} ${this.state.sortedByPriceDesc ? "desc" : ""}`} >Price </button>
 						<button onClick={this.sortByTitle} className={`btn ${this.state.sortedByTitle ? "asc" : ""} ${this.state.sortedByTitleDesc ? "desc" : ""}`} >Title </button>
 					</div>
-					<Wishlist wishlist={wishlist} client={this.props.client} addToCart={this.addToCart} client={this.props.client} shop={shop} />
+					<Wishlist wishlist={wishlist} wishlistOpen={this.state.wishlistOpen} client={this.props.client} addToCart={this.addToCart} client={this.props.client} shop={shop} handleWishlistClose={this.handleWishlistClose} />
 					<ProductList wishlist={wishlist} products={currentProducts} loading={loading} addToCart={this.addToCart} addToWishList={this.addToWishList} client={this.props.client} shop={shop} />
 					<Pagination productsPerPage={productsPerPage} totalProducts={products.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} currentPage={currentPage} />
 				</div>

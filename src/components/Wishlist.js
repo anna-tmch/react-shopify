@@ -3,42 +3,20 @@ import ItemWishlist from './ItemWishlist'
 
 export default class Wishlist extends Component {
 
-	constructor() {
-		super();
-		this.state = {
-			wishedProducts: []
-		};
-	}
-
-	componentDidUpdate(prevProps) {
-		const wishlist = this.props.wishlist;
-		let ids = wishlist.map(item => item.id);
-		if (this.props.wishlist !== prevProps.wishlist) {
-			if (this.props.wishlist.length > 0) {
-				this.props.client.product.fetchMultiple(ids).then((response) => {
-					this.setState({
-						wishedProducts: response
-					});
-				})
-			} else {
-				this.setState({
-					wishedProducts: []
-				});
-			}
-		}
-	}
-
-
 	render() {
 
-		const productsWishlist = this.state.wishedProducts.map((item) => {
+		const productsWishlist = this.props.wishlist.map((item) => {
 			return (
-				<ItemWishlist key={`wishitem-${item.id}`} item={item} />
+				<ItemWishlist key={`wishitem-${item.id}`} item={item} addToCart={this.props.addToCart} />
 			)
 		});
 
 		return (
-			<div className="wishlist">
+			<div className={`wishlist ${this.props.wishlistOpen ? 'active' : ''}`}>
+				<div className="wishlist-header">
+					<h2>My wishlist</h2>
+					<div className="cross-icon" onClick={() => this.props.handleWishlistClose()}></div>
+				</div>
 				{productsWishlist}
 			</div>
 		)

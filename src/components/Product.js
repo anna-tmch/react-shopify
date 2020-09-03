@@ -104,8 +104,8 @@ class Product extends Component {
 							<button className="increase-quantity" onClick={this.increase}>+</button>
 						</div>
 					</div>
-					<button onClick={() => this.props.addToWishList(id, this.state.selectedVariant.id)} className="btn-wish">
-						<Icon key={`icon-${variant.id}`} fill={this.props.wishlist.some(item => item.id === id && item.selectedVariantId === this.state.selectedVariant.id) ? "#585858" : "#fff"} stroke="#585858" />
+					<button onClick={() => this.props.addToWishList(this.props.product.title, this.state.selectedVariant)} className="btn-wish">
+						<Icon key={`icon-${variant.id}`} fill={this.props.wishlist.some(item => item.selectedVariant.id === this.state.selectedVariant.id) ? "#585858" : "#fff"} stroke="#585858" />
 					</button>
 					<button className="button buy-button" onClick={() => this.props.addToCart(variant.id, quantity)}> Add to cart </button>
 				</div>

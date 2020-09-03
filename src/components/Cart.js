@@ -24,7 +24,7 @@ export default class Cart extends Component {
 			<div className={`cart ${cartOpen ? 'active' : ''}`}>
 				<div className="cart-header">
 					<h2>My cart</h2>
-					<div className="cross-icon" onClick={() => this.props.handleClick()}></div>
+					<div className="cross-icon" onClick={() => this.props.handleCartClose()}></div>
 				</div>
 				{cart.length > 0 ?
 					<div className="cart-content">
