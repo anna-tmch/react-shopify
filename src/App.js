@@ -76,6 +76,23 @@ class App extends React.Component {
 		});
 	});
 
+	moveToCart = (() => {
+		const wishlist = this.state.wishlist;
+		const checkout = this.state.checkout.id;
+
+		const items = wishlist.map((item) => {
+			return { variantId: item.selectedVariant.id, quantity: 1 }
+		})
+
+		return this.props.client.checkout.addLineItems(checkout, items).then(response => {
+			this.setState({
+				checkout: response,
+				cartOpen: true,
+				wishlist: []
+			});
+		});
+	})
+
 	addToWishList = ((title, selectedVariant) => {
 		const wishlist = this.state.wishlist;
 		const wishItem = [{ title: title, selectedVariant: selectedVariant }];
@@ -87,10 +104,19 @@ class App extends React.Component {
 			})
 		} else {
 			this.setState({
-				wishlist: [...wishlist, { title: title, selectedVariant: selectedVariant }],
+				wishlist: [...wishlist, { title: title, selectedVariant: selectedVariant, quantity: 1 }],
 				wishlistOpen: true
 			})
 		}
+	})
+
+	removefromWishlist = ((id) => {
+		const wishlist = this.state.wishlist;
+
+		const newWishlist = wishlist.filter((item) => item.selectedVariant.id !== id)
+		this.setState({
+			wishlist: newWishlist,
+		})
 	})
 
 	removeItem = ((id) => {
@@ -118,6 +144,12 @@ class App extends React.Component {
 				checkout: response,
 			});
 		});
+	}
+
+	emptyWishlist = () => {
+		this.setState({
+			wishlist: [],
+		})
 	}
 
 	toggleCart = () => {
@@ -217,7 +249,7 @@ class App extends React.Component {
 						<button onClick={this.sortByPrice} className={`btn ${this.state.sortedByPrice ? "asc" : ""} ${this.state.sortedByPriceDesc ? "desc" : ""}`} >Price </button>
 						<button onClick={this.sortByTitle} className={`btn ${this.state.sortedByTitle ? "asc" : ""} ${this.state.sortedByTitleDesc ? "desc" : ""}`} >Title </button>
 					</div>
-					<Wishlist wishlist={wishlist} wishlistOpen={this.state.wishlistOpen} client={this.props.client} addToCart={this.addToCart} client={this.props.client} shop={shop} toggleWishlist={this.toggleWishlist} />
+					<Wishlist emptyWishlist={this.emptyWishlist} wishlist={wishlist} wishlistOpen={this.state.wishlistOpen} client={this.props.client} addToCart={this.addToCart} moveToCart={this.moveToCart} removefromWishlist={this.removefromWishlist} client={this.props.client} shop={shop} toggleWishlist={this.toggleWishlist} />
 					<ProductList wishlist={wishlist} products={currentProducts} loading={loading} addToCart={this.addToCart} addToWishList={this.addToWishList} client={this.props.client} shop={shop} />
 					<Pagination productsPerPage={productsPerPage} totalProducts={products.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} currentPage={currentPage} />
 				</div>

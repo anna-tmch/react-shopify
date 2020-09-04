@@ -33,10 +33,9 @@ export default class Cart extends Component {
 					</div> : <div className="cart-empty"> Cart is empty... </div>}
 				{checkout.totalPrice > 0 ?
 					<div className="cart-footer">
-						<div className="cart-total">Total: 	{`${checkout.totalPrice} ${shop.currencyCode}`}</div>
+						<div className="cart-total">Total: 	{`${Number(checkout.totalPrice)} ${shop.currencyCode}`}</div>
 						<div className="cart-checkout">	<a href={checkout.webUrl}>Checkout</a></div>
 					</div> : null}
-
 			</div>
 		)
 	}
